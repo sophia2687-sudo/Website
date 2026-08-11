@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThinkRite — A place to write, and nothing else</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --tan:        #e9e6da;
+    --tan-deep:   #d9d4c1;
+    --white:      #f7f7f2;
+    --ink:        #202b26;
+    --ink-soft:   #52605a;
+    --green:      #2e5c48;
+    --green-deep: #1f4235;
+    --green-soft: #7a9c8c;
+    --blue:       #345a78;
+    --blue-soft:  #7f9bb0;
+    --orange:     #d97a34;
+    --card:       #f2f0e6;
+    --rule:       rgba(32,43,38,0.14);
+    --key:        #cfcabb;
+    --max: 1120px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--tan);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 32px;}
+  .mark{
+    background-image: linear-gradient(var(--green-soft), var(--green-soft));
+    background-repeat:no-repeat;
+    background-size: 100% 82%;
+    background-position: 0 70%;
+    padding:0 3px;
+    box-decoration-break:clone;
+    -webkit-box-decoration-break:clone;
+  }
+  .mark.blue{ background-image: linear-gradient(var(--blue-soft), var(--blue-soft)); }
+  .mark.orange{ background-image: linear-gradient(#ecc59a, #ecc59a); }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(233,230,218,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--rule);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; height:72px;}
+  .brand{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:20px;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+    display:flex; align-items:center; gap:9px;
+    text-decoration:none;
+  }
+  .brand .dot{ width:9px; height:9px; border-radius:2px; background:var(--green); display:inline-block; }
+  .navlinks{display:flex; gap:34px; align-items:center;}
+  .navlinks a{
+    color:var(--ink-soft); text-decoration:none; font-size:14.5px; font-weight:500;
+    letter-spacing:0.01em;
+  }
+  .navlinks a:hover{color:var(--blue);}
+  .nav-cta{
+    background:var(--green); color:var(--white) !important; padding:9px 18px;
+    border-radius:4px; font-weight:600 !important;
+  }
+  .nav-cta:hover{background:var(--green-deep);}
+  @media (max-width:760px){ .navlinks a:not(.nav-cta){display:none;} }
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    padding:84px 0 60px;
+    border-bottom:1px solid var(--rule);
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.05fr 0.95fr; gap:64px; align-items:center;
+  }
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr; gap:48px;} }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:0.1em;
+    text-transform:uppercase; color:var(--green-deep); font-weight:500;
+    display:flex; align-items:center; gap:10px; margin-bottom:22px;
+  }
+  .eyebrow::before{content:''; width:22px; height:2px; background:var(--orange);}
+
+  h1.headline{
+    font-family:'Space Grotesk', sans-serif; font-weight:600;
+    font-size:clamp(36px, 5vw, 58px); line-height:1.07; letter-spacing:-0.02em;
+    margin:0 0 24px;
+  }
+
+  .sub{ font-size:18px; color:var(--ink-soft); max-width:480px; margin:0 0 34px; }
+
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:28px;}
+  .btn{
+    font-family:'Work Sans', sans-serif; font-weight:600; font-size:15px;
+    padding:14px 26px; border-radius:4px; border:1px solid transparent; cursor:pointer;
+    text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .btn-primary{background:var(--green); color:var(--white);}
+  .btn-primary:hover{background:var(--green-deep); transform:translateY(-1px);}
+  .btn-ghost{background:transparent; border-color:var(--ink); color:var(--ink);}
+  .btn-ghost:hover{background:var(--ink); color:var(--white);}
+
+  .hero-note{ font-size:13px; color:var(--ink-soft); font-family:'IBM Plex Mono', monospace; }
+
+  /* ---------- DEVICE MOCKUP (laptop shape, real keyboard, opens & closes on a hinge) ---------- */
+  .device-stage{ display:flex; flex-direction:column; align-items:center; }
+  .stage-inner{ position:relative; width:100%; max-width:420px; }
+  .laptop-wrap{ position:relative; perspective:1700px; padding:10px 0 4px; transition:opacity .4s ease; }
+  .laptop-wrap.hidden{ opacity:0; pointer-events:none; }
+  .laptop{
+    position:relative; transform-style:preserve-3d;
+    transform:rotateX(2deg);
+  }
+
+  /* analog scene shown when the lid is closed - pen, paper, a mind at work */
+  .analog-scene{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .5s ease; gap:18px;
+  }
+  .analog-scene.visible{ opacity:1; pointer-events:auto; }
+  .analog-caption{ text-align:center; }
+  .analog-caption .line1{ font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:16px; color:var(--ink); margin:0 0 4px; }
+  .analog-caption .line2{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--ink-soft); letter-spacing:0.03em; margin:0; }
+
+  /* screen half - hinges open/closed around its bottom edge */
+  .screen-lid{
+    position:relative; z-index:2;
+    transform-origin:50% 100%;
+    transform:rotateX(12deg);
+    transition:transform .9s cubic-bezier(.65,0,.35,1);
+    background:linear-gradient(160deg,#d3cfc0,#b7b19d);
+    border-radius:12px 12px 4px 4px;
+    padding:12px 12px 16px;
+    box-shadow: 0 30px 60px -28px rgba(32,43,38,0.45);
+  }
+  .laptop.closed .screen-lid{ transform:rotateX(100deg); }
+
+  .device-topbar{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:0 4px 10px; font-family:'IBM Plex Mono', monospace; font-size:10.5px;
+    color:var(--ink-soft); letter-spacing:0.03em;
+  }
+  .signal-chip{
+    display:flex; align-items:center; gap:6px; cursor:pointer; user-select:none;
+    padding:3px 8px; border-radius:20px; background:rgba(32,43,38,0.06);
+  }
+  .signal-dot{width:6px; height:6px; border-radius:50%; background:var(--ink-soft); transition:background .15s;}
+  .signal-chip.on .signal-dot{ background:var(--blue); }
+  .signal-chip.on .signal-label{ color:var(--blue); }
+
+  .screen{
+    background:#dcd8c9;
+    border-radius:5px;
+    padding:20px 18px;
+    min-height:250px;
+    position:relative;
+    box-shadow: inset 0 0 0 1px rgba(32,43,38,0.08), inset 0 2px 10px rgba(32,43,38,0.06);
+  }
+  .screen::before{
+    content:''; position:absolute; inset:0; border-radius:5px; opacity:0.45;
+    background-image: radial-gradient(rgba(32,43,38,0.05) 1px, transparent 1px);
+    background-size: 3px 3px;
+    pointer-events:none;
+  }
+  .screen-tabs{ display:flex; gap:4px; margin-bottom:14px; position:relative; z-index:1;}
+  .screen-tab{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.03em;
+    padding:6px 10px; border-radius:3px; cursor:pointer; color:var(--ink-soft);
+    border:1px solid transparent; background:transparent; text-transform:uppercase;
+  }
+  .screen-tab.active{ background:var(--white); color:var(--ink); border-color:#c4bfab; }
+  .screen-tab.active[data-mode="lookup"]{ color:var(--blue); border-color:var(--blue-soft); }
+  .screen-body{ position:relative; z-index:1; min-height:160px; }
+  .screen-body .line1{ font-family:'Space Grotesk', sans-serif; font-size:16px; font-weight:600; margin:0 0 10px; color:var(--ink); }
+  .screen-body p{ font-size:13px; color:var(--ink-soft); margin:0 0 10px; line-height:1.6; font-family:'Work Sans', sans-serif;}
+  .caret{ display:inline-block; width:2px; height:13px; background:var(--ink); vertical-align:middle; animation:blink 1s step-end infinite; margin-left:2px;}
+  @keyframes blink{ 50%{opacity:0;} }
+  .screen-footer{
+    position:absolute; bottom:14px; left:18px; right:18px;
+    display:flex; justify-content:space-between; font-family:'IBM Plex Mono', monospace;
+    font-size:9.5px; color:var(--ink-soft); letter-spacing:0.02em; z-index:1;
+  }
+
+  /* hinge bar between screen and keyboard base */
+  .hinge{
+    position:relative; z-index:3; height:10px; margin:0 10px;
+    background:linear-gradient(180deg,#a49d87,#8b846f);
+    border-radius:0 0 3px 3px;
+    box-shadow: inset 0 2px 3px rgba(0,0,0,0.25);
+  }
+
+  /* keyboard base - fixed, laptop always rests on it */
+  .keyboard-base{
+    position:relative; z-index:1;
+    transform-origin:50% 0%;
+    transform:rotateX(58deg);
+    background:linear-gradient(180deg,#c7c1ae,#aca589);
+    border-radius:4px 4px 14px 14px;
+    padding:16px 16px 22px;
+    box-shadow: 0 6px 0 rgba(32,43,38,0.15), 0 20px 40px -20px rgba(32,43,38,0.35);
+  }
+  .krow{ display:flex; gap:5px; margin-bottom:5px; justify-content:center; }
+  .krow.r2{ margin-left:10px; }
+  .krow.r3{ margin-left:20px; }
+  .key{
+    flex:1; max-width:26px; height:22px; border-radius:5px;
+    background:linear-gradient(180deg,#eee9db,#d2ccb9);
+    box-shadow: 0 2px 0 rgba(32,43,38,0.28), inset 0 1px 1px rgba(255,255,255,0.6);
+  }
+  .krow.bottom{ margin-top:3px; margin-left:0; }
+  .krow.bottom .key.space{ max-width:150px; flex:5; border-radius:6px; }
+  .krow.bottom .key.mod{ max-width:34px; flex:1.3; border-radius:6px; background:linear-gradient(180deg,#c9c4b3,#b6b19f); }
+  .trackpad{
+    width:90px; height:34px; margin:8px auto 0; border-radius:4px;
+    background:linear-gradient(180deg,#d6d1c0,#c4bea8);
+    box-shadow: inset 0 1px 2px rgba(32,43,38,0.25);
+  }
+  .stand-foot{
+    width:120px; height:8px; margin:6px auto 0; border-radius:0 0 6px 6px;
+    background:linear-gradient(180deg,#a49d87,#8b846f);
+    box-shadow: 0 4px 8px -2px rgba(32,43,38,0.3);
+  }
+
+  .laptop-toggle{
+    position:relative; z-index:5;
+    margin-top:22px; background:none; border:1px solid var(--ink); color:var(--ink);
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:0.05em;
+    padding:8px 16px; border-radius:20px; cursor:pointer; text-transform:uppercase;
+    display:flex; align-items:center; gap:8px; transition:background .15s, color .15s;
+  }
+  .laptop-toggle:hover{ background:var(--ink); color:var(--white); }
+  .laptop-toggle .chevron{ display:inline-block; transition:transform .5s; }
+  .laptop-toggle.closed .chevron{ transform:rotate(180deg); }
+
+  /* ---------- SECTION SHARED ---------- */
+  section{ padding:84px 0; border-bottom:1px solid var(--rule); }
+  section:last-of-type{ border-bottom:none; }
+  .section-head{ max-width:600px; margin-bottom:52px; }
+  .section-head .eyebrow{ margin-bottom:16px; }
+  h2{
+    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:clamp(26px,3.2vw,38px);
+    letter-spacing:-0.015em; margin:0 0 16px; line-height:1.14;
+  }
+  .section-head p{ color:var(--ink-soft); font-size:16px; max-width:520px; }
+
+  /* ---------- PROBLEM / CONTRAST ---------- */
+  .contrast-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:6px; overflow:hidden;}
+  @media (max-width:760px){ .contrast-grid{grid-template-columns:1fr;} }
+  .contrast-col{ background:var(--tan); padding:36px 34px; }
+  .contrast-col.no{ background:#ddd7c5; }
+  .contrast-col.yes{ background:var(--card); }
+  .contrast-label{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:20px; display:block; color:var(--ink-soft);}
+  .contrast-col.yes .contrast-label{ color:var(--green-deep); }
+  .contrast-col ul{ list-style:none; padding:0; margin:0; }
+  .contrast-col li{ padding:11px 0; border-top:1px solid var(--rule); font-size:15px; }
+  .contrast-col li:first-of-type{ border-top:none; }
+  .contrast-col.no li{ color:var(--ink-soft); }
+  .contrast-col.no li::before{ content:'— '; }
+  .contrast-col.yes li::before{ content:'✓ '; color:var(--green); font-weight:700; }
+  .research-note{
+    margin-top:24px; font-size:13.5px; color:var(--ink-soft); font-style:normal;
+    padding-left:16px; border-left:2px solid var(--rule);
+  }
+  .research-note em{ color:var(--ink); font-style:italic; }
+
+  /* ---------- FEATURES ---------- */
+  .feature-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:6px; overflow:hidden; }
+  @media (max-width:860px){ .feature-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:560px){ .feature-grid{grid-template-columns:1fr;} }
+  .feature{ background:var(--card); padding:30px 26px; }
+  .feature.addon{ background:#e7edea; }
+  .feature .fnum{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--green); margin-bottom:16px; display:block; }
+  .feature.addon .fnum{ color:var(--blue); }
+  .feature h3{ font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:18px; margin:0 0 10px; }
+  .feature p{ font-size:14px; color:var(--ink-soft); margin:0; }
+  .addon-tag{
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:10px;
+    text-transform:uppercase; letter-spacing:0.06em; background:var(--blue); color:var(--white);
+    padding:2px 7px; border-radius:3px; margin-bottom:12px;
+  }
+
+  /* ---------- HOW IT WORKS ---------- */
+  .steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:40px; }
+  @media (max-width:800px){ .steps{grid-template-columns:1fr; gap:36px;} }
+  .step .stepnum{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--white); background:var(--green);
+    display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px;
+    border-radius:50%; margin-bottom:16px;
+  }
+  .step.signal-step .stepnum{ background:var(--blue); }
+  .step h3{ font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:19px; margin:0 0 10px; }
+  .step p{ color:var(--ink-soft); font-size:15px; margin:0; }
+
+  /* ---------- AUDIENCE ---------- */
+  .audience-grid{ display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+  @media (max-width:760px){ .audience-grid{grid-template-columns:1fr;} }
+  .audience-card{ background:var(--card); border:1px solid var(--rule); border-top:3px solid var(--green); border-radius:6px; padding:36px; }
+  .audience-card.blue{ border-top-color:var(--blue); }
+  .audience-card.blue .eyebrow{ color:var(--blue); }
+  .audience-card.blue .eyebrow::before{ background:var(--blue); }
+  .audience-card .eyebrow{ margin-bottom:14px; }
+  .audience-card h3{ font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:22px; margin:0 0 14px; }
+  .audience-card p{ color:var(--ink-soft); font-size:15px; margin:0 0 20px; }
+  .audience-card a{ color:var(--green-deep); font-weight:600; text-decoration:none; font-size:14.5px; }
+  .audience-card a:hover{ text-decoration:underline; }
+
+  /* ---------- CTA / SIGNUP ---------- */
+  .cta-section{ background:var(--green-deep); color:var(--white); border-bottom:none; }
+  .cta-inner{ display:flex; justify-content:space-between; align-items:flex-end; gap:40px; flex-wrap:wrap; }
+  .cta-inner h2{ color:var(--white); max-width:480px; }
+  .cta-inner .section-head p{ color:#bcd0c5; }
+  .cta-inner .eyebrow{ color:#e8c199; }
+  .cta-inner .eyebrow::before{ background:var(--orange); }
+  .signup{ display:flex; gap:10px; flex-wrap:wrap; min-width:320px; }
+  .signup input{
+    background:#2a4a3c; border:1px solid #3e6353; color:var(--white);
+    padding:14px 16px; border-radius:4px; font-family:'Work Sans', sans-serif;
+    font-size:15px; flex:1; min-width:220px;
+  }
+  .signup input::placeholder{ color:#7fa393; }
+  .signup .btn-primary{ background:var(--orange); color:var(--white); }
+  .signup .btn-primary:hover{ background:#c0692a; }
+  .cta-note{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:#7fa393; margin-top:12px; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ padding:44px 0; }
+  .footer-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  .footer-row .brand{ font-size:16px; }
+  footer .fmeta{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="#" class="brand"><span class="dot"></span>ThinkRite</a>
+    <div class="navlinks">
+      <a href="#problem">Why</a>
+      <a href="#features">Device</a>
+      <a href="#how">How it works</a>
+      <a href="#audience">For schools</a>
+      <a href="#signup" class="nav-cta">Get updates</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">A device built to protect focus</div>
+      <h1 class="headline">A quiet place<br>for the <span class="mark">mind to work.</span></h1>
+      <p class="sub">ThinkRite is a single-purpose writing device built to protect a student's focus and voice. A real keyboard, a paper-like display, and a dictionary and thesaurus within reach. No browser, no chat, no notifications.</p>
+      <div class="hero-actions">
+        <a href="#signup" class="btn btn-primary">Get early access</a>
+        <a href="#how" class="btn btn-ghost">See how it works</a>
+      </div>
+      <div class="hero-note">Built for students recovering from a decade of EdTech.</div>
+    </div>
+
+    <div class="device-stage">
+      <div class="stage-inner">
+        <div class="laptop-wrap" id="laptopWrap">
+          <div class="laptop" id="laptop">
+            <div class="screen-lid">
+              <div class="device-topbar">
+                <span>THINK RITE</span>
+                <span class="signal-chip" id="signalChip" title="Optional school add-on">
+                  <span class="signal-dot"></span>
+                  <span class="signal-label" id="signalLabel">Signal: Off</span>
+                </span>
+              </div>
+              <div class="screen">
+                <div class="screen-tabs">
+                  <div class="screen-tab active" data-mode="write">Write</div>
+                  <div class="screen-tab" data-mode="outline">Outline</div>
+                  <div class="screen-tab" data-mode="lookup">Look up</div>
+                </div>
+                <div class="screen-body" id="screenBody"></div>
+                <div class="screen-footer">
+                  <span id="screenMeta">Untitled — 0 words</span>
+                  <span id="screenMeta2">84% battery</span>
+                </div>
+              </div>
+            </div>
+            <div class="hinge"></div>
+            <div class="keyboard-base">
+              <div class="krow r1"><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span></div>
+              <div class="krow r2"><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span></div>
+              <div class="krow r3"><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span></div>
+              <div class="krow bottom"><span class="key mod"></span><span class="key space"></span><span class="key mod"></span></div>
+              <div class="trackpad"></div>
+            </div>
+            <div class="stand-foot"></div>
+          </div>
+        </div>
+
+        <div class="analog-scene" id="analogScene">
+          <svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- notebook page -->
+            <rect x="26" y="18" width="150" height="184" rx="6" style="fill:var(--white); stroke:var(--rule); stroke-width:1.5"/>
+            <circle cx="38" cy="34" r="3" style="fill:var(--tan-deep)"/>
+            <circle cx="38" cy="56" r="3" style="fill:var(--tan-deep)"/>
+            <circle cx="38" cy="78" r="3" style="fill:var(--tan-deep)"/>
+            <circle cx="38" cy="100" r="3" style="fill:var(--tan-deep)"/>
+            <circle cx="38" cy="122" r="3" style="fill:var(--tan-deep)"/>
+            <circle cx="38" cy="144" r="3" style="fill:var(--tan-deep)"/>
+            <circle cx="38" cy="166" r="3" style="fill:var(--tan-deep)"/>
+            <circle cx="38" cy="188" r="3" style="fill:var(--tan-deep)"/>
+            <line x1="56" y1="44" x2="160" y2="44" style="stroke:var(--ink-soft); stroke-width:2.5; opacity:0.3"/>
+            <line x1="56" y1="66" x2="160" y2="66" style="stroke:var(--ink-soft); stroke-width:2.5; opacity:0.3"/>
+            <line x1="56" y1="88" x2="140" y2="88" style="stroke:var(--ink-soft); stroke-width:2.5; opacity:0.3"/>
+            <line x1="56" y1="110" x2="160" y2="110" style="stroke:var(--green); stroke-width:2.5; opacity:0.55"/>
+            <line x1="56" y1="132" x2="120" y2="132" style="stroke:var(--ink); stroke-width:2.5; opacity:0.6"/>
+            <!-- pen resting across the page -->
+            <g transform="rotate(-38 150 150)">
+              <rect x="90" y="145" width="120" height="11" rx="5.5" style="fill:var(--orange)"/>
+              <rect x="90" y="145" width="34" height="11" rx="5.5" style="fill:var(--ink)"/>
+              <polygon points="210,145 224,150.5 210,156" style="fill:var(--ink-soft)"/>
+            </g>
+          </svg>
+          <div class="analog-caption">
+            <p class="line1">Some thinking doesn't need a screen.</p>
+            <p class="line2">Closed for focus</p>
+          </div>
+        </div>
+      </div>
+
+      <button class="laptop-toggle" id="laptopToggle">
+        <span id="toggleLabel">Close lid</span> <span class="chevron">⌄</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section id="problem">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">What a decade of EdTech cost the classroom</div>
+      <h2>Every tool promised <span class="mark blue">focus.</span> Most delivered a browser.</h2>
+      <p>Sustained attention is a skill, built the same way any other skill is, through practice without interruption. Chat, tabs, games, and a dozen other things compete for a student's attention, all one click away from the essay they're supposed to be writing. The device meant to help students do their work became the easiest way to do anything but.</p>
+    </div>
+
+    <div class="contrast-grid">
+      <div class="contrast-col no">
+        <span class="contrast-label">A school laptop, mid-essay</span>
+        <ul>
+          <li>A tab open to something that isn't the assignment</li>
+          <li>A chat window, minimized but blinking</li>
+          <li>Autocorrect and AI tools finishing the sentence for them</li>
+          <li>A backlit screen bright enough to strain eyes by third period</li>
+          <li>Notifications, always one buzz away</li>
+        </ul>
+      </div>
+      <div class="contrast-col yes">
+        <span class="contrast-label">ThinkRite, mid-essay</span>
+        <ul>
+          <li>One document, no tabs to leave it for</li>
+          <li>No chat, no accounts, nothing pulling their attention elsewhere</li>
+          <li>A dictionary and thesaurus, nothing that writes for them</li>
+          <li>A paper-like screen, easy on the eyes for hours</li>
+          <li>No signal in, no signal out, unless a school turns one on</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">What's actually on the device</div>
+      <h2>Everything a writer needs. <span class="mark orange">Nothing</span> more.</h2>
+      <p>Every feature here is built to help a student write, think, or focus more clearly. Nothing extra made it onto the device.</p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature">
+        <span class="fnum">01</span>
+        <h3>A paper-like screen</h3>
+        <p>Reflective, not backlit. No glow, no glare, no blue light by the end of a school day, and none of the pull of a bright screen designed to keep you looking at it.</p>
+      </div>
+      <div class="feature">
+        <span class="fnum">02</span>
+        <h3>Dictionary & thesaurus, built in</h3>
+        <p>Look up a word without leaving the page. No browser tab required, no search history to speak of.</p>
+      </div>
+      <div class="feature">
+        <span class="fnum">03</span>
+        <h3>No browser. No apps. No chat.</h3>
+        <p>Not hidden, not locked behind admin settings. It was never built. There's nothing to disable, because there's nothing there.</p>
+      </div>
+      <div class="feature">
+        <span class="fnum">04</span>
+        <h3>An outline mode</h3>
+        <p>For structuring an essay before writing the draft. Same quiet screen, built for organizing ideas instead of finishing sentences.</p>
+      </div>
+      <div class="feature">
+        <span class="fnum">05</span>
+        <h3>Designed for posture, not just typing</h3>
+        <p>An ergonomic keyboard with comfortably spaced keys, on a stand that angles the whole device up so there's no hunching over a flat screen.</p>
+      </div>
+      <div class="feature addon">
+        <span class="addon-tag">School add-on</span>
+        <span class="fnum">06</span>
+        <h3>Classroom Signal</h3>
+        <p>Off by default. A school can turn on one connection, and only one: to whatever the school already uses, Google Classroom, Canvas, or similar, for turning in finished work. Nothing else gets through.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">From blank page to finished draft</div>
+      <h2>How a class period actually goes.</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="stepnum">1</span>
+        <h3>Open to a blank page</h3>
+        <p>The device turns on instantly, straight into the document a student was working on. No login screen, no loading spinner.</p>
+      </div>
+      <div class="step">
+        <span class="stepnum">2</span>
+        <h3>Type, and look things up as needed</h3>
+        <p>The thesaurus and dictionary are a keystroke away, so a hard word never means putting the pen down.</p>
+      </div>
+      <div class="step signal-step">
+        <span class="stepnum">3</span>
+        <h3>Turn in when Classroom Signal is on</h3>
+        <p>If a school has switched it on, the draft syncs to Google Classroom, Canvas, or whatever the school runs. Otherwise, the device stays fully offline, by design.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="audience">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Built for both</div>
+      <h2>For the school, and the student.</h2>
+    </div>
+    <div class="audience-grid">
+      <div class="audience-card blue">
+        <div class="eyebrow">For schools</div>
+        <h3>Convenient to hand out. Nothing to police.</h3>
+        <p>No filtering software, no monitoring dashboards, no IT tickets about students finding a way around the lock. The restriction is built into the hardware. Turn on Classroom Signal if you want syncing, leave it off if you don't.</p>
+        <a href="#signup">Talk to us about a classroom set →</a>
+      </div>
+      <div class="audience-card">
+        <div class="eyebrow">For students</div>
+        <h3>A place to think that isn't also a place to scroll.</h3>
+        <p>Handwriting is slow and messy, and a laptop is loud with constant distractions. ThinkRite gives them a third option: quiet enough to actually finish a thought, honest enough that nothing writes it for them.</p>
+        <a href="#signup">Join the waitlist →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="signup">
+  <div class="wrap">
+    <div class="cta-inner">
+      <div class="section-head" style="margin-bottom:0;">
+        <div class="eyebrow">Early access</div>
+        <h2>Be first to know when ThinkRite ships.</h2>
+        <p>We're building the first devices now. Leave your email and we'll reach out as pilots open up to schools.</p>
+      </div>
+      <div>
+        <form class="signup" onsubmit="event.preventDefault(); this.querySelector('button').textContent='You\'re on the list';">
+          <input type="email" placeholder="you@school.org" required>
+          <button class="btn btn-primary" type="submit">Notify me</button>
+        </form>
+        <div class="cta-note">No spam. We'll write to you, and that's it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <a href="#" class="brand"><span class="dot"></span>ThinkRite</a>
+    <div class="fmeta">© 2026 ThinkRite</div>
+  </div>
+</footer>
+
+<script>
+  const content = {
+    write: {
+      title: "The Hollow Men — draft 2",
+      body: "<p>What is more terrifying than a shadow, is the space where a shadow should fall and does not. Eliot understood this better than most, and it's why the poem still<span class=\"caret\"></span></p>",
+      meta: "The Hollow Men — 214 words"
+    },
+    outline: {
+      title: "The Hollow Men — essay outline",
+      body: "<p><strong>I.</strong> Eliot's central image: the shadow that falls between idea and reality<br><strong>II.</strong> How the poem's fragmented structure mirrors its subject<br><strong>III.</strong> The whimper, not the bang<span class=\"caret\"></span></p>",
+      meta: "Outline — 3 sections"
+    },
+    lookup: {
+      title: "melancholy <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);\">/ˈmelənˌkälē/</span>",
+      body: "<p style=\"margin-bottom:6px;\"><em>noun</em> — a pensive sadness, typically with no obvious cause.</p><p style=\"margin-bottom:6px;\"><strong>Synonyms:</strong> wistfulness, sorrow, gloom, pensiveness</p><p><strong>Antonyms:</strong> cheerfulness, jubilance</p>",
+      meta: "Dictionary & thesaurus"
+    }
+  };
+
+  const tabs = document.querySelectorAll('.screen-tab');
+  const body = document.getElementById('screenBody');
+  const meta = document.getElementById('screenMeta');
+
+  function render(mode){
+    const c = content[mode];
+    body.innerHTML = '<p class="line1">' + c.title + '</p>' + c.body;
+    meta.textContent = c.meta;
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      render(tab.dataset.mode);
+    });
+  });
+
+  render('write');
+
+  const chip = document.getElementById('signalChip');
+  const label = document.getElementById('signalLabel');
+  chip.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOn = chip.classList.toggle('on');
+    label.textContent = isOn ? 'Signal: LMS' : 'Signal: Off';
+  });
+
+  const laptop = document.getElementById('laptop');
+  const laptopWrap = document.getElementById('laptopWrap');
+  const analogScene = document.getElementById('analogScene');
+  const toggleBtn = document.getElementById('laptopToggle');
+  const toggleLabel = document.getElementById('toggleLabel');
+  let animating = false;
+
+  toggleBtn.addEventListener('click', () => {
+    if(animating) return;
+    animating = true;
+    const isCurrentlyOpen = !laptop.classList.contains('closed');
+
+    if(isCurrentlyOpen){
+      // close: fold the lid down, then fade to the analog scene
+      laptop.classList.add('closed');
+      toggleBtn.classList.add('closed');
+      toggleLabel.textContent = 'Open lid';
+      setTimeout(() => {
+        laptopWrap.classList.add('hidden');
+        analogScene.classList.add('visible');
+        animating = false;
+      }, 750);
+    } else {
+      // open: fade out the analog scene, then unfold the lid
+      analogScene.classList.remove('visible');
+      toggleBtn.classList.remove('closed');
+      toggleLabel.textContent = 'Close lid';
+      setTimeout(() => {
+        laptopWrap.classList.remove('hidden');
+        requestAnimationFrame(() => laptop.classList.remove('closed'));
+        animating = false;
+      }, 350);
+    }
+  });
+</script>
+
+</body>
+</html>
