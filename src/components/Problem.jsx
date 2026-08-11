@@ -20,7 +20,7 @@ export default function Problem() {
       <div className="wrap">
         <div className="section-head">
           <div className="eyebrow">What a decade of EdTech cost the classroom</div>
-          <h2>Every tool promised <span className="mark blue">focus.</span> Most delivered a browser.</h2>
+          <h2>Every tool promised <span className="mark blue">focus.</span> Most delivered noise.</h2>
           <p>
             Sustained attention is a skill, built the same way any other skill is,
             through practice without interruption. Chat, tabs, games, and a dozen
