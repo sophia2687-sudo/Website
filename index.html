@@ -70,6 +70,11 @@
     text-decoration:none;
   }
   .brand .dot{ width:9px; height:9px; border-radius:2px; background:var(--green); display:inline-block; }
+  .brand-by{
+    font-family:'IBM Plex Mono', monospace; font-weight:400; font-size:11px;
+    color:var(--ink-soft); letter-spacing:0.03em; margin-left:2px;
+  }
+  @media (max-width:560px){ .brand-by{ display:none; } }
   .navlinks{display:flex; gap:34px; align-items:center;}
   .navlinks a{
     color:var(--ink-soft); text-decoration:none; font-size:14.5px; font-weight:500;
@@ -94,7 +99,7 @@
   @media (max-width:900px){ .hero-grid{grid-template-columns:1fr; gap:48px;} }
 
   .eyebrow{
-    font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:0.1em;
+    font-family:'IBM Plex Mono', monospace; font-size:14px; letter-spacing:0.08em;
     text-transform:uppercase; color:var(--green-deep); font-weight:500;
     display:flex; align-items:center; gap:10px; margin-bottom:22px;
   }
@@ -106,7 +111,7 @@
     margin:0 0 24px;
   }
 
-  .sub{ font-size:18px; color:var(--ink-soft); max-width:480px; margin:0 0 34px; }
+  .sub{ font-size:18px; line-height:1.6; color:var(--ink-soft); max-width:540px; margin:0 0 30px; }
 
   .hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:28px;}
   .btn{
@@ -253,15 +258,15 @@
   .laptop-toggle.closed .chevron{ transform:rotate(180deg); }
 
   /* ---------- SECTION SHARED ---------- */
-  section{ padding:84px 0; border-bottom:1px solid var(--rule); }
+  section{ padding:76px 0; border-bottom:1px solid var(--rule); }
   section:last-of-type{ border-bottom:none; }
-  .section-head{ max-width:600px; margin-bottom:52px; }
+  .section-head{ max-width:680px; margin-bottom:40px; }
   .section-head .eyebrow{ margin-bottom:16px; }
   h2{
     font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:clamp(26px,3.2vw,38px);
     letter-spacing:-0.015em; margin:0 0 16px; line-height:1.14;
   }
-  .section-head p{ color:var(--ink-soft); font-size:16px; max-width:520px; }
+  .section-head p{ color:var(--ink-soft); font-size:16px; line-height:1.6; max-width:580px; }
 
   /* ---------- PROBLEM / CONTRAST ---------- */
   .contrast-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:6px; overflow:hidden;}
@@ -289,7 +294,7 @@
   @media (max-width:560px){ .feature-grid{grid-template-columns:1fr;} }
   .feature{ background:var(--card); padding:30px 26px; }
   .feature.addon{ background:#e7edea; }
-  .feature .fnum{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--green); margin-bottom:16px; display:block; }
+  .feature .fnum{ font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--green); margin-bottom:16px; display:block; }
   .feature.addon .fnum{ color:var(--blue); }
   .feature h3{ font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:18px; margin:0 0 10px; }
   .feature p{ font-size:14px; color:var(--ink-soft); margin:0; }
@@ -353,7 +358,7 @@
 
 <nav>
   <div class="wrap">
-    <a href="#" class="brand"><span class="dot"></span>ThinkRite</a>
+    <a href="#" class="brand"><span class="dot"></span>ThinkRite<span class="brand-by">by Kiwi</span></a>
     <div class="navlinks">
       <a href="#problem">Why</a>
       <a href="#features">Device</a>
@@ -599,8 +604,8 @@
 
 <footer>
   <div class="wrap footer-row">
-    <a href="#" class="brand"><span class="dot"></span>ThinkRite</a>
-    <div class="fmeta">© 2026 ThinkRite</div>
+    <a href="#" class="brand"><span class="dot"></span>ThinkRite<span class="brand-by">by Kiwi</span></a>
+    <div class="fmeta">ThinkRite is made by Kiwi. © 2026 Kiwi, Inc.</div>
   </div>
 </footer>
 
